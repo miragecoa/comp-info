@@ -11,7 +11,19 @@ const PORT = 1337;
 const JWT_SECRET = 'your-secret-key-change-it';
 
 // Middleware
-app.use(cors());
+const whitelist = ['https://lianginvestments.com', 'https://www.lianginvestments.com', 'http://localhost:8080', 'http://localhost:1337'];
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/admin', express.static(path.join(__dirname, '../public/admin')));
