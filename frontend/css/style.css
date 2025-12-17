@@ -1,0 +1,572 @@
+/* 里昂生态环保投资 - 主样式文件 */
+
+/* ===== CSS变量与主题 ===== */
+:root {
+    --primary-color: #1a5f3c;
+    --primary-light: #2d8a5a;
+    --primary-dark: #0d3d24;
+    --secondary-color: #c8a45a;
+    --secondary-light: #e0bd74;
+    --accent-color: #3d9970;
+    --text-primary: #1a1a1a;
+    --text-secondary: #4a4a4a;
+    --text-light: #ffffff;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-dark: #1a2a22;
+    --gradient-primary: linear-gradient(135deg, #1a5f3c 0%, #2d8a5a 50%, #3d9970 100%);
+    --gradient-hero: linear-gradient(180deg, rgba(26, 42, 34, 0.85) 0%, rgba(26, 95, 60, 0.7) 100%);
+    --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.9) 100%);
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.12);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.16);
+    --shadow-glow: 0 0 40px rgba(45, 138, 90, 0.3);
+    --border-radius: 12px;
+    --border-radius-lg: 24px;
+    --transition: all 0.3s ease;
+    --font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ===== 重置与基础样式 ===== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-family);
+    line-height: 1.7;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    overflow-x: hidden;
+}
+
+/* ===== 加载动画 ===== */
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-content {
+    text-align: center;
+    color: var(--text-light);
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: var(--text-light);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ===== 容器 ===== */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* ===== 头部导航 ===== */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+    background: transparent;
+}
+
+.header.scrolled {
+    background: rgba(26, 42, 34, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 16px 40px;
+    box-shadow: var(--shadow-md);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-light);
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.logo-icon {
+    font-size: 1.75rem;
+}
+
+.nav {
+    display: flex;
+    gap: 32px;
+}
+
+.nav-link {
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 8px 0;
+    position: relative;
+    transition: var(--transition);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--secondary-color);
+    transition: var(--transition);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* ===== 英雄区域 ===== */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: url('../images/factory-bg.png') center/cover no-repeat fixed;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-hero);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: var(--text-light);
+    padding: 40px;
+    max-width: 900px;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    animation: fadeInUp 1s ease-out;
+}
+
+.hero-slogan {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 300;
+    margin-bottom: 48px;
+    opacity: 0.95;
+    letter-spacing: 0.15em;
+    animation: fadeInUp 1s ease-out 0.2s backwards;
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-bottom: 48px;
+    animation: fadeInUp 1s ease-out 0.4s backwards;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    display: block;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--secondary-light);
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.hero-cta {
+    display: inline-block;
+    padding: 16px 48px;
+    background: var(--secondary-color);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 50px;
+    transition: var(--transition);
+    animation: fadeInUp 1s ease-out 0.6s backwards;
+}
+
+.hero-cta:hover {
+    background: var(--secondary-light);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-glow);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== 通用区块样式 ===== */
+.section {
+    padding: 100px 0;
+}
+
+.section-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 60px;
+    position: relative;
+    color: var(--primary-dark);
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--gradient-primary);
+    margin: 20px auto 0;
+    border-radius: 2px;
+}
+
+/* ===== 公司简介 ===== */
+.about-section {
+    background: var(--bg-secondary);
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+}
+
+.about-text {
+    font-size: 1.1rem;
+    line-height: 1.9;
+    color: var(--text-secondary);
+}
+
+.about-text p {
+    margin-bottom: 20px;
+}
+
+.about-highlights {
+    display: grid;
+    gap: 24px;
+}
+
+.highlight-item {
+    background: var(--gradient-card);
+    padding: 28px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    border: 1px solid rgba(45, 138, 90, 0.1);
+}
+
+.highlight-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-light);
+}
+
+.highlight-icon {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+}
+
+.highlight-item h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+}
+
+.highlight-item p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+/* ===== 创始人团队 ===== */
+.founders-section {
+    background: var(--bg-primary);
+}
+
+.founders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 40px;
+}
+
+.founder-card {
+    display: flex;
+    gap: 28px;
+    background: var(--gradient-card);
+    padding: 36px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    border: 1px solid rgba(45, 138, 90, 0.08);
+}
+
+.founder-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.founder-avatar {
+    flex-shrink: 0;
+}
+
+.avatar-placeholder {
+    width: 100px;
+    height: 100px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-light);
+    box-shadow: var(--shadow-sm);
+}
+
+.founder-info {
+    flex: 1;
+}
+
+.founder-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+}
+
+.founder-position {
+    font-size: 1.1rem;
+    color: var(--primary-light);
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.founder-details {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    padding: 12px;
+    background: rgba(45, 138, 90, 0.05);
+    border-radius: 8px;
+}
+
+.founder-details p {
+    margin-bottom: 6px;
+}
+
+.founder-details p:last-child {
+    margin-bottom: 0;
+}
+
+.founder-bio {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+}
+
+/* ===== 主营业务 ===== */
+.business-section {
+    background: var(--bg-dark);
+    color: var(--text-light);
+}
+
+.business-section .section-title {
+    color: var(--text-light);
+}
+
+.business-section .section-title::after {
+    background: var(--secondary-color);
+}
+
+.business-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+}
+
+.business-card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    transition: var(--transition);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.business-card:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-8px);
+    border-color: var(--secondary-color);
+}
+
+.business-icon {
+    font-size: 3.5rem;
+    margin-bottom: 24px;
+}
+
+.business-card h3 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--secondary-light);
+}
+
+.business-card p {
+    font-size: 1rem;
+    line-height: 1.8;
+    opacity: 0.85;
+}
+
+/* ===== 页脚 ===== */
+.footer {
+    background: var(--primary-dark);
+    color: var(--text-light);
+    padding: 40px 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.footer-text {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+/* ===== 响应式设计 ===== */
+@media (max-width: 992px) {
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .founders-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .founder-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .founder-avatar {
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 16px 20px;
+    }
+    
+    .nav {
+        display: none;
+    }
+    
+    .hero-stats {
+        flex-direction: column;
+        gap: 32px;
+    }
+    
+    .section {
+        padding: 60px 0;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content {
+        padding: 20px;
+    }
+    
+    .founder-card {
+        padding: 24px;
+    }
+    
+    .business-card {
+        padding: 28px;
+    }
+}

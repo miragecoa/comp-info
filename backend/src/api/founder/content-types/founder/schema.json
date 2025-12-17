@@ -1,0 +1,45 @@
+{
+    "kind": "collectionType",
+    "collectionName": "founders",
+    "info": {
+        "singularName": "founder",
+        "pluralName": "founders",
+        "displayName": "创始人",
+        "description": "公司创始人信息"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "name": {
+            "type": "string",
+            "required": true
+        },
+        "position": {
+            "type": "string",
+            "required": true
+        },
+        "education": {
+            "type": "text"
+        },
+        "biography": {
+            "type": "richtext"
+        },
+        "shareholding": {
+            "type": "string"
+        },
+        "avatar": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": [
+                "images"
+            ]
+        },
+        "order": {
+            "type": "integer",
+            "default": 0
+        }
+    }
+}
