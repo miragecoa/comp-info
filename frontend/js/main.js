@@ -186,31 +186,37 @@ function renderBusinessHighlights(mainBusiness) {
 
     // 默认业务列表
     const defaultBusinesses = [
-        { icon: '⚡', title: '生物质发电', desc: '请在CMS中设置业务描述' },
-        { icon: '🔥', title: '热力供应', desc: '请在CMS中设置业务描述' },
-        { icon: '♻️', title: '环保投资', desc: '请在CMS中设置业务描述' }
+        { icon: '', title: '生物质发电', desc: '请在CMS中设置业务描述' },
+        { icon: '', title: '热力供应', desc: '请在CMS中设置业务描述' },
+        { icon: '', title: '环保投资', desc: '请在CMS中设置业务描述' }
     ];
 
     // 尝试从mainBusiness解析业务信息
     let businesses = defaultBusinesses;
-    if (mainBusiness) {
-        // 如果mainBusiness是逗号分隔的字符串，拆分并创建业务卡片
-        const parts = mainBusiness.split('、');
+    if (mainBusiness && typeof mainBusiness === 'string') {
+        const parts = mainBusiness.split(/[,，、]/).map(s => s.trim()).filter(Boolean);
         if (parts.length > 0) {
-            const icons = ['🌾', '⚡', '🏭', '♻️', '🔥'];
-            businesses = parts.map((part, index) => ({
-                icon: icons[index % icons.length],
-                title: part.trim(),
+            // Remove icons array usage
+            businesses = parts.map((part) => ({
+                icon: '',
+                title: part,
                 desc: '点击查看详情'
             }));
         }
+    } else if (mainBusiness && Array.isArray(mainBusiness)) {
+        // Handle array case too if backend returns array
+        businesses = mainBusiness.map((part) => ({
+            icon: '',
+            title: part,
+            desc: '点击查看详情'
+        }));
     }
 
     // 渲染高亮区域
     if (highlightsContainer) {
         highlightsContainer.innerHTML = businesses.slice(0, 3).map(biz => `
             <div class="highlight-item">
-                <div class="highlight-icon">${biz.icon}</div>
+                <div class="highlight-icon" style="display:none;"></div>
                 <h3>${biz.title}</h3>
                 <p>${biz.desc}</p>
             </div>
@@ -221,7 +227,7 @@ function renderBusinessHighlights(mainBusiness) {
     if (businessContainer) {
         businessContainer.innerHTML = businesses.map(biz => `
             <div class="business-card">
-                <div class="business-icon">${biz.icon}</div>
+                 <div class="business-icon" style="display:none;"></div>
                 <h3>${biz.title}</h3>
                 <p>${biz.desc}</p>
             </div>
