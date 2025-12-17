@@ -5,7 +5,9 @@
  */
 
 // API配置
-const API_BASE_URL = 'http://localhost:1337/api';
+// API配置
+const API_BASE_URL = '/api';
+
 
 // DOM加载完成后执行
 document.addEventListener('DOMContentLoaded', function () {
