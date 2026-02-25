@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initMobileNav();
     initSmoothScroll();
     initRevealAnimations();
+    initLightbox();
 
     Promise.all([
         loadCompanyData(),
@@ -117,6 +118,58 @@ function initRevealAnimations() {
     reveals.forEach(el => observer.observe(el));
 }
 
+/* --- Lightbox for Gallery --- */
+function initLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxClose = document.getElementById('lightbox-close');
+    const galleryCards = document.querySelectorAll('.gallery-card');
+
+    if (!lightbox || !lightboxImg || !lightboxClose || galleryCards.length === 0) return;
+
+    galleryCards.forEach(card => {
+        card.addEventListener('click', function () {
+            const img = this.querySelector('img');
+            if (img) {
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt;
+
+                // Show standard setup
+                lightbox.style.display = 'flex';
+                // Trigger reflow for transition
+                lightbox.offsetHeight;
+                lightbox.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+        });
+    });
+
+    const closeLightbox = () => {
+        lightbox.classList.remove('show');
+        setTimeout(() => {
+            lightbox.style.display = 'none';
+            document.body.style.overflow = '';
+            lightboxImg.src = '';
+        }, 300); // match CSS transition duration
+    };
+
+    lightboxClose.addEventListener('click', closeLightbox);
+
+    // Close when clicking outside the image
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('show')) {
+            closeLightbox();
+        }
+    });
+}
+
 /* --- Load company data --- */
 async function loadCompanyData() {
     try {
@@ -218,9 +271,9 @@ function renderFoundersData(founders) {
             <div class="founder-card reveal">
                 <div class="founder-avatar">
                     ${avatarUrl
-                        ? `<img class="avatar-img" src="${avatarUrl}" alt="${f.name}">`
-                        : `<div class="avatar-circle">${f.name ? f.name.charAt(0) : '?'}</div>`
-                    }
+                ? `<img class="avatar-img" src="${avatarUrl}" alt="${f.name}">`
+                : `<div class="avatar-circle">${f.name ? f.name.charAt(0) : '?'}</div>`
+            }
                 </div>
                 <div class="founder-body">
                     <div class="founder-header">
