@@ -4,109 +4,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>里昂生态环保投资 | Liang Investments</title>
-    <meta name="description" content="里昂生态环保投资 - 专注于生物质能源开发与环保投资的领先企业">
-    <meta name="keywords" content="里昂生态,生物质发电,环保投资,理昂生态能源">
+    <title>湖南理昂环保能源投资有限公司 | Liang Investments</title>
+    <meta name="description"
+        content="湖南理昂环保能源投资有限公司 - 国内农林生物质发电行业骨干企业，主营农林废弃物发电、生物质能发电、热力生产供应">
+    <meta name="keywords" content="湖南理昂,环保能源,生物质发电,农林废弃物发电,热力生产供应,理昂生态">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap"
         rel="stylesheet">
     <link rel="canonical" href="https://lianginvestments.com/" />
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <!-- 加载动画 -->
+    <!-- Loading -->
     <div id="loader" class="loader">
-        <div class="loader-content">
-            <div class="spinner"></div>
-            <p>加载中...</p>
-        </div>
+        <div class="loader-spinner"></div>
     </div>
 
-    <!-- 主容器 -->
-    <div class="main-container">
-        <!-- 头部导航 -->
-        <header class="header">
-            <div class="logo">
-                <span class="logo-icon"></span>
-                <span class="logo-text" id="header-logo-text">加载中...</span>
-            </div>
-            <nav class="nav">
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-inner">
+            <a href="#" class="logo" id="header-logo-text">湖南理昂环保能源投资有限公司</a>
+            <nav class="nav" id="nav">
                 <a href="#about" class="nav-link">关于我们</a>
                 <a href="#founders" class="nav-link">创始团队</a>
                 <a href="#business" class="nav-link">主营业务</a>
             </nav>
-        </header>
+            <button class="nav-toggle" id="nav-toggle" aria-label="菜单">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
 
-        <!-- 英雄区域 -->
-        <section class="hero" id="about">
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <h1 class="hero-title" id="company-name">加载中...</h1>
-                <p class="hero-slogan" id="company-slogan">--</p>
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <span class="stat-value" id="founded-date">--</span>
-                        <span class="stat-label">成立时间</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value" id="capital">--</span>
-                        <span class="stat-label">注册资本(人民币)</span>
-                    </div>
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title" id="company-name">湖南理昂环保能源投资有限公司</h1>
+            <p class="hero-slogan" id="company-slogan">国内农林生物质发电行业骨干企业</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="founded-date">2014年</span>
+                    <span class="stat-label">成立时间</span>
                 </div>
-                <a href="#founders" class="hero-cta">了解更多</a>
-            </div>
-        </section>
-
-        <!-- 公司简介 -->
-        <section class="section about-section">
-            <div class="container">
-                <h2 class="section-title">公司简介</h2>
-                <div class="about-content">
-                    <div class="about-text" id="company-description">
-                        <p class="loading-text">正在加载公司简介...</p>
-                    </div>
-                    <div class="about-highlights" id="about-highlights">
-                        <!-- 将通过API加载 -->
-                    </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-value" id="capital">1.82亿元</span>
+                    <span class="stat-label">注册资本(人民币)</span>
                 </div>
             </div>
-        </section>
+            <a href="#about" class="hero-cta">了解更多</a>
+        </div>
+    </section>
 
-        <!-- 创始人团队 -->
-        <section class="section founders-section" id="founders">
-            <div class="container">
-                <h2 class="section-title">创始团队</h2>
-                <div class="founders-grid" id="founders-container">
-                    <p class="loading-text">正在加载创始人信息...</p>
+    <!-- About -->
+    <section class="section about-section" id="about">
+        <div class="container">
+            <h2 class="section-title reveal">公司简介</h2>
+            <div class="about-content">
+                <div class="about-text reveal" id="company-description">
+                    <p class="loading-text">正在加载公司简介...</p>
                 </div>
+                <div class="about-highlights" id="about-highlights"></div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- 主营业务 -->
-        <section class="section business-section" id="business">
-            <div class="container">
-                <h2 class="section-title">主营业务</h2>
-                <div class="business-content" id="main-business">
-                    <p class="loading-text" style="color: white;">正在加载业务信息...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 页脚 -->
-        <footer class="footer">
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-brand">
-                        <span class="logo-icon"></span>
-                        <span id="footer-company-name">加载中...</span>
+    <!-- Gallery -->
+    <section class="section gallery-section" id="gallery">
+        <div class="container">
+            <h2 class="section-title reveal">发电项目</h2>
+            <p class="section-subtitle reveal">全国多地布局生物质发电项目，推动农林废弃物资源化利用</p>
+            <div class="gallery-grid">
+                <div class="gallery-card gallery-card--featured reveal">
+                    <div class="gallery-img-wrap">
+                        <img src="images/pictures/2.jpg" alt="贵港理昂生物质发电有限公司" loading="lazy">
                     </div>
-                    <p class="footer-text" id="footer-copyright">© 2024 . All Rights Reserved.</p>
+                    <p class="gallery-caption">贵港理昂生物质发电有限公司</p>
+                </div>
+                <div class="gallery-card reveal">
+                    <div class="gallery-img-wrap">
+                        <img src="images/pictures/1.jpg" alt="郎溪理昂生物质发电有限公司" loading="lazy">
+                    </div>
+                    <p class="gallery-caption">郎溪理昂生物质发电有限公司</p>
+                </div>
+                <div class="gallery-card reveal">
+                    <div class="gallery-img-wrap">
+                        <img src="images/pictures/3.jpg" alt="抚州理昂农林废弃物热电有限公司" loading="lazy">
+                    </div>
+                    <p class="gallery-caption">抚州理昂农林废弃物热电有限公司</p>
+                </div>
+                <div class="gallery-card reveal">
+                    <div class="gallery-img-wrap">
+                        <img src="images/pictures/7.jpg" alt="罗山理昂农林废弃物热电有限公司" loading="lazy">
+                    </div>
+                    <p class="gallery-caption">罗山理昂农林废弃物热电有限公司</p>
+                </div>
+                <div class="gallery-card reveal">
+                    <div class="gallery-img-wrap">
+                        <img src="images/pictures/4.jpg" alt="扶绥理昂生物质发电有限公司" loading="lazy">
+                    </div>
+                    <p class="gallery-caption">扶绥理昂生物质发电有限公司</p>
+                </div>
+                <div class="gallery-card reveal">
+                    <div class="gallery-img-wrap">
+                        <img src="images/pictures/5.jpg" alt="理昂生态" loading="lazy">
+                    </div>
+                    <p class="gallery-caption">理昂生态</p>
+                </div>
+                <div class="gallery-card reveal">
+                    <div class="gallery-img-wrap">
+                        <img src="images/pictures/6.jpg" alt="贺州理昂农林废弃物热电有限公司" loading="lazy">
+                    </div>
+                    <p class="gallery-caption">贺州理昂农林废弃物热电有限公司</p>
                 </div>
             </div>
-        </footer>
-    </div>
+        </div>
+    </section>
+
+    <!-- Founders -->
+    <section class="section founders-section" id="founders">
+        <div class="container">
+            <h2 class="section-title reveal">创始团队</h2>
+            <div class="founders-list" id="founders-container">
+                <p class="loading-text">正在加载创始人信息...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business -->
+    <section class="section business-section" id="business">
+        <div class="container">
+            <h2 class="section-title light reveal">主营业务</h2>
+            <div class="business-grid" id="main-business">
+                <p class="loading-text" style="color: rgba(255,255,255,0.6);">正在加载业务信息...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <span class="footer-brand" id="footer-company-name">湖南理昂环保能源投资有限公司</span>
+                <span class="footer-copy" id="footer-copyright">&copy; 2026 湖南理昂环保能源投资有限公司. All Rights
+                    Reserved.</span>
+            </div>
+        </div>
+    </footer>
 
     <script src="js/main.js"></script>
 </body>

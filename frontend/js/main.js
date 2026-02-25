@@ -1,299 +1,254 @@
 /**
- * 里昂生态环保投资 - 主JavaScript文件
- * 功能：从Strapi CMS API获取所有数据并渲染到页面
- * 所有内容都来自CMS，没有默认数据
+ * 湖南理昂环保能源投资有限公司 - Main Script
  */
 
-// API配置
-// API配置
-const API_BASE_URL = '/api';
+const API_BASE_URL = window.location.hostname === 'localhost'
+    ? 'http://localhost:1337/api'
+    : '/api';
 
-
-// DOM加载完成后执行
 document.addEventListener('DOMContentLoaded', function () {
-    // 初始化滚动效果
-    initScrollEffects();
+    initHeader();
+    initActiveNav();
+    initMobileNav();
+    initSmoothScroll();
+    initRevealAnimations();
 
-    // 从API加载所有数据
     Promise.all([
         loadCompanyData(),
         loadFoundersData()
     ]).then(() => {
-        // 数据加载完成后隐藏加载动画
         setTimeout(() => {
             const loader = document.getElementById('loader');
-            if (loader) {
-                loader.classList.add('hidden');
-            }
-        }, 500);
-    }).catch(error => {
-        console.error('加载数据出错:', error);
-        // 仍然隐藏加载动画
+            if (loader) loader.classList.add('hidden');
+        }, 300);
+    }).catch(() => {
         const loader = document.getElementById('loader');
-        if (loader) {
-            loader.classList.add('hidden');
-        }
+        if (loader) loader.classList.add('hidden');
     });
 });
 
-/**
- * 初始化滚动效果
- */
-function initScrollEffects() {
-    const header = document.querySelector('.header');
+/* --- Header scroll effect --- */
+function initHeader() {
+    const header = document.getElementById('header');
+    if (!header) return;
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
+    const check = () => header.classList.toggle('scrolled', window.scrollY > 60);
+    window.addEventListener('scroll', check, { passive: true });
+    check();
+}
+
+/* --- Active nav link based on scroll position --- */
+function initActiveNav() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    if (!sections.length || !navLinks.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                });
+            }
+        });
+    }, { rootMargin: '-40% 0px -60% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+}
+
+/* --- Mobile navigation toggle --- */
+function initMobileNav() {
+    const toggle = document.getElementById('nav-toggle');
+    const nav = document.getElementById('nav');
+    if (!toggle || !nav) return;
+
+    toggle.addEventListener('click', () => {
+        toggle.classList.toggle('active');
+        nav.classList.toggle('open');
     });
 
-    // 平滑滚动到锚点
+    // Close on link click
+    nav.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            toggle.classList.remove('active');
+            nav.classList.remove('open');
+        });
+    });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+        if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+            toggle.classList.remove('active');
+            nav.classList.remove('open');
+        }
+    });
+}
+
+/* --- Smooth scroll for anchor links --- */
+function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                const offset = 90;
+                const top = target.getBoundingClientRect().top + window.scrollY - offset;
+                window.scrollTo({ top, behavior: 'smooth' });
             }
         });
     });
 }
 
-/**
- * 从API加载公司数据
- */
+/* --- Scroll reveal animations --- */
+function initRevealAnimations() {
+    const reveals = document.querySelectorAll('.reveal:not(.visible)');
+    if (!reveals.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+
+    reveals.forEach(el => observer.observe(el));
+}
+
+/* --- Load company data --- */
 async function loadCompanyData() {
     try {
-        const response = await fetch(`${API_BASE_URL}/company`);
-        if (!response.ok) {
-            throw new Error(`API响应错误: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('公司数据:', data);
-
-        if (data && data.data) {
-            const company = data.data;
-            renderCompanyData(company);
-        } else {
-            displayError('company', '未找到公司数据，请在CMS中添加');
-        }
-    } catch (error) {
-        console.error('加载公司数据失败:', error.message);
-        displayError('company', '无法加载公司数据: ' + error.message);
+        const res = await fetch(`${API_BASE_URL}/company`);
+        if (!res.ok) throw new Error(`${res.status}`);
+        const json = await res.json();
+        if (json?.data) renderCompanyData(json.data);
+        else showError('company', '未找到公司数据');
+    } catch (err) {
+        console.error('Company data error:', err);
+        showError('company', '无法加载公司数据');
     }
 }
 
-/**
- * 从API加载创始人数据
- */
+/* --- Load founders data --- */
 async function loadFoundersData() {
     try {
-        const response = await fetch(`${API_BASE_URL}/founders?sort=order:asc&populate=avatar`);
-        if (!response.ok) {
-            throw new Error(`API响应错误: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('创始人数据:', data);
-
-        if (data && data.data && data.data.length > 0) {
-            renderFoundersData(data.data);
-        } else {
-            displayError('founders', '未找到创始人数据，请在CMS中添加');
-        }
-    } catch (error) {
-        console.error('加载创始人数据失败:', error.message);
-        displayError('founders', '无法加载创始人数据: ' + error.message);
+        const res = await fetch(`${API_BASE_URL}/founders?sort=order:asc&populate=avatar`);
+        if (!res.ok) throw new Error(`${res.status}`);
+        const json = await res.json();
+        if (json?.data?.length) renderFoundersData(json.data);
+        else showError('founders', '未找到创始人数据');
+    } catch (err) {
+        console.error('Founders data error:', err);
+        showError('founders', '无法加载创始人数据');
     }
 }
 
-/**
- * 渲染公司数据到页面
- */
+/* --- Render company data --- */
 function renderCompanyData(company) {
-    // 更新头部Logo文字
-    const headerLogo = document.getElementById('header-logo-text');
-    if (headerLogo && company.name) {
-        headerLogo.textContent = company.name;
+    setText('header-logo-text', company.name);
+    setText('company-name', company.name);
+    setText('company-slogan', company.slogan);
+    setText('footer-company-name', company.name);
+
+    const dateEl = document.getElementById('founded-date');
+    if (dateEl && company.foundedDate) {
+        dateEl.textContent = new Date(company.foundedDate).getFullYear() + '年';
     }
 
-    // 更新公司名称
-    const companyName = document.getElementById('company-name');
-    if (companyName) {
-        companyName.textContent = company.name || '未设置公司名称';
+    setText('capital', company.registeredCapital);
+
+    const descEl = document.getElementById('company-description');
+    if (descEl && company.description) descEl.innerHTML = company.description;
+
+    const copyEl = document.getElementById('footer-copyright');
+    if (copyEl && company.name) {
+        copyEl.innerHTML = `&copy; ${new Date().getFullYear()} ${company.name}. All Rights Reserved.`;
     }
 
-    // 更新口号
-    const slogan = document.getElementById('company-slogan');
-    if (slogan) {
-        slogan.textContent = company.slogan || '未设置口号';
-    }
-
-    // 更新成立时间
-    const foundedDate = document.getElementById('founded-date');
-    if (foundedDate && company.foundedDate) {
-        const date = new Date(company.foundedDate);
-        foundedDate.textContent = date.getFullYear() + '年';
-    } else if (foundedDate) {
-        foundedDate.textContent = '未设置';
-    }
-
-    // 更新注册资本
-    const capital = document.getElementById('capital');
-    if (capital) {
-        capital.textContent = company.registeredCapital || '未设置';
-    }
-
-    // 更新公司描述
-    const descContainer = document.getElementById('company-description');
-    if (descContainer) {
-        if (company.description) {
-            descContainer.innerHTML = company.description;
-        } else {
-            descContainer.innerHTML = '<p class="error-text">未设置公司描述</p>';
-        }
-    }
-
-    // 渲染业务高亮区域
-    renderBusinessHighlights(company.mainBusiness);
-
-    // 更新页脚
-    const footerName = document.getElementById('footer-company-name');
-    if (footerName && company.name) {
-        footerName.textContent = company.name;
-    }
-
-    const footerCopyright = document.getElementById('footer-copyright');
-    if (footerCopyright && company.name) {
-        const year = new Date().getFullYear();
-        footerCopyright.textContent = `© ${year} ${company.name}. All Rights Reserved.`;
-    }
+    renderBusiness(company.mainBusiness);
 }
 
-/**
- * 渲染业务高亮区域
- */
-function renderBusinessHighlights(mainBusiness) {
-    const highlightsContainer = document.getElementById('about-highlights');
-    const businessContainer = document.getElementById('main-business');
-
-    // 默认业务列表
-    const defaultBusinesses = [
-        { icon: '', title: '生物质发电', desc: '请在CMS中设置业务描述' },
-        { icon: '', title: '热力供应', desc: '请在CMS中设置业务描述' },
-        { icon: '', title: '环保投资', desc: '请在CMS中设置业务描述' }
-    ];
-
-    // 尝试从mainBusiness解析业务信息
-    let businesses = defaultBusinesses;
-    if (mainBusiness && typeof mainBusiness === 'string') {
-        const parts = mainBusiness.split(/[,，、]/).map(s => s.trim()).filter(Boolean);
-        if (parts.length > 0) {
-            // Remove icons array usage
-            businesses = parts.map((part) => ({
-                icon: '',
-                title: part,
-                desc: '点击查看详情'
-            }));
-        }
-    } else if (mainBusiness && Array.isArray(mainBusiness)) {
-        // Handle array case too if backend returns array
-        businesses = mainBusiness.map((part) => ({
-            icon: '',
-            title: part,
-            desc: '点击查看详情'
-        }));
+/* --- Render business --- */
+function renderBusiness(mainBusiness) {
+    let items = [];
+    if (typeof mainBusiness === 'string') {
+        items = mainBusiness.split(/[,，、]/).map(s => s.trim()).filter(Boolean);
+    } else if (Array.isArray(mainBusiness)) {
+        items = mainBusiness;
     }
+    if (!items.length) return;
 
-    // 渲染高亮区域
-    if (highlightsContainer) {
-        highlightsContainer.innerHTML = businesses.slice(0, 3).map(biz => `
-            <div class="highlight-item">
-                <div class="highlight-icon" style="display:none;"></div>
-                <h3>${biz.title}</h3>
-                <p>${biz.desc}</p>
+    const highlightsEl = document.getElementById('about-highlights');
+    if (highlightsEl) {
+        highlightsEl.innerHTML = items.map(item => `
+            <div class="highlight-item reveal">
+                <h3>${item}</h3>
+                <p>点击查看详情</p>
             </div>
         `).join('');
     }
 
-    // 渲染业务卡片
-    if (businessContainer) {
-        businessContainer.innerHTML = businesses.map(biz => `
-            <div class="business-card">
-                 <div class="business-icon" style="display:none;"></div>
-                <h3>${biz.title}</h3>
-                <p>${biz.desc}</p>
+    const businessEl = document.getElementById('main-business');
+    if (businessEl) {
+        businessEl.innerHTML = items.map((item, i) => `
+            <div class="business-card reveal">
+                <div class="business-number">${String(i + 1).padStart(2, '0')}</div>
+                <h3>${item}</h3>
+                <p>点击查看详情</p>
             </div>
         `).join('');
     }
+
+    initRevealAnimations();
 }
 
-/**
- * 渲染创始人数据到页面
- */
+/* --- Render founders (horizontal cards) --- */
 function renderFoundersData(founders) {
     const container = document.getElementById('founders-container');
     if (!container) return;
 
-    container.innerHTML = founders.map(founder => {
-        // Strapi v5 数据结构
-        const data = founder;
-        const avatarUrl = data.avatar?.url
-            ? API_BASE_URL.replace('/api', '') + data.avatar.url
+    container.innerHTML = founders.map(f => {
+        const avatarUrl = f.avatar?.url
+            ? API_BASE_URL.replace('/api', '') + f.avatar.url
             : null;
 
         return `
-            <div class="founder-card">
+            <div class="founder-card reveal">
                 <div class="founder-avatar">
                     ${avatarUrl
-                ? `<img src="${avatarUrl}" alt="${data.name}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;">`
-                : `<div class="avatar-placeholder">${data.name ? data.name.charAt(0) : '?'}</div>`
-            }
+                        ? `<img class="avatar-img" src="${avatarUrl}" alt="${f.name}">`
+                        : `<div class="avatar-circle">${f.name ? f.name.charAt(0) : '?'}</div>`
+                    }
                 </div>
-                <div class="founder-info">
-                    <h3 class="founder-name">${data.name || '未设置姓名'}</h3>
-                    <p class="founder-position">${data.position || '未设置职位'}</p>
-                    <div class="founder-details">
-                        ${data.education ? `<p><strong>教育背景：</strong>${data.education}</p>` : ''}
-                        ${data.shareholding ? `<p><strong>持股比例：</strong>${data.shareholding}</p>` : ''}
+                <div class="founder-body">
+                    <div class="founder-header">
+                        <h3 class="founder-name">${f.name || ''}</h3>
+                        <span class="founder-position">${f.position || ''}</span>
                     </div>
-                    ${data.biography ? `<p class="founder-bio">${data.biography}</p>` : '<p class="founder-bio">未设置个人简介</p>'}
+                    ${f.education ? `<span class="founder-edu">${f.education}</span>` : ''}
+                    <p class="founder-bio">${f.biography || ''}</p>
                 </div>
             </div>
         `;
     }).join('');
+
+    initRevealAnimations();
 }
 
-/**
- * 显示错误信息
- */
-function displayError(section, message) {
-    const errorHTML = `<p class="error-text" style="color: #ff6b6b; padding: 20px; background: rgba(255,107,107,0.1); border-radius: 8px; text-align: center;">${message}</p>`;
-
-    switch (section) {
-        case 'company':
-            const companyName = document.getElementById('company-name');
-            if (companyName) companyName.textContent = '数据加载失败';
-
-            const descContainer = document.getElementById('company-description');
-            if (descContainer) descContainer.innerHTML = errorHTML;
-            break;
-
-        case 'founders':
-            const foundersContainer = document.getElementById('founders-container');
-            if (foundersContainer) foundersContainer.innerHTML = errorHTML;
-            break;
-    }
+/* --- Utilities --- */
+function setText(id, text) {
+    const el = document.getElementById(id);
+    if (el && text) el.textContent = text;
 }
 
-// 打印欢迎信息
-console.log('%c里昂生态环保投资', 'color: #1a5f3c; font-size: 24px; font-weight: bold;');
-console.log('%c所有内容从Strapi CMS加载', 'color: #c8a45a; font-size: 14px;');
-console.log('%cAPI地址: ' + API_BASE_URL, 'color: #666; font-size: 12px;');
+function showError(section, msg) {
+    const html = `<p class="error-text">${msg}</p>`;
+    const targets = {
+        company: 'company-description',
+        founders: 'founders-container'
+    };
+    const el = document.getElementById(targets[section]);
+    if (el) el.innerHTML = html;
+}

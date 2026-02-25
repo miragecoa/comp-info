@@ -11,7 +11,7 @@ const PORT = 1337;
 const JWT_SECRET = 'your-secret-key-change-it';
 
 // Middleware
-const whitelist = ['https://lianginvestments.com', 'https://www.lianginvestments.com', 'http://localhost:8080', 'http://localhost:1337'];
+const whitelist = ['https://lianginvestments.com', 'https://www.lianginvestments.com', 'http://localhost:8080', 'http://localhost:1337', 'http://localhost:3000'];
 const corsOptions = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1 || !origin) {
